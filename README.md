@@ -108,6 +108,13 @@ The backend health check is here:
 http://localhost:8000/health
 ```
 
+## Documentation
+
+- [Project overview](PROJECT.md)
+- [Roadmap](ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+- [Codex instructions](CODEX.md)
+
 ## For Developers
 
 Docker files are still included for developers, but Docker is not required to use ReceiptIQ.
