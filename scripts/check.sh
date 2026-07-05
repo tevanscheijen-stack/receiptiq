@@ -7,6 +7,6 @@ black --check .
 pytest
 
 cd ../frontend
-pnpm run lint
-pnpm run test
-pnpm run build
+CI=true pnpm run lint
+CI=true pnpm run test
+CI=true pnpm run build

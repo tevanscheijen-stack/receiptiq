@@ -3,13 +3,16 @@ from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.db.session import get_db
 from app.models import Receipt
-from app.schemas import ReceiptResponse
+from app.ocr.base import OCREngine, get_ocr_engine
+from app.schemas import ProcessReceiptsRequest, ReceiptResponse
+from app.services.processing import ReceiptProcessingService
 
 router = APIRouter(prefix="/api/v1/receipts", tags=["receipts"])
 
@@ -17,6 +20,7 @@ ALLOWED_EXTENSIONS = {"pdf", "png", "jpg", "jpeg", "heic", "webp", "html"}
 CHUNK_SIZE = 1024 * 1024
 UPLOAD_FILE = File(...)
 DATABASE_SESSION = Depends(get_db)
+OCR_ENGINE = Depends(get_ocr_engine)
 
 
 def get_file_extension(filename: str) -> str:
@@ -113,3 +117,43 @@ def list_receipts(
         select(Receipt).order_by(Receipt.upload_timestamp.desc())
     ).all()
     return [ReceiptResponse.model_validate(receipt) for receipt in receipts]
+
+
+@router.post("/process", response_model=list[ReceiptResponse])
+def process_receipts(
+    request: ProcessReceiptsRequest,
+    db: Annotated[Session, DATABASE_SESSION],
+    ocr_engine: Annotated[OCREngine, OCR_ENGINE],
+) -> list[ReceiptResponse]:
+    service = ReceiptProcessingService(db, ocr_engine=ocr_engine)
+    service.process_receipts_by_ids(request.receipt_ids)
+    receipts = db.scalars(
+        select(Receipt).order_by(Receipt.upload_timestamp.desc())
+    ).all()
+    return [ReceiptResponse.model_validate(receipt) for receipt in receipts]
+
+
+@router.get("/{receipt_id}/original")
+def get_original_receipt(
+    receipt_id: str,
+    db: Annotated[Session, DATABASE_SESSION],
+) -> FileResponse:
+    receipt = db.get(Receipt, receipt_id)
+    if receipt is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Receipt not found.",
+        )
+
+    original_file = Path(settings.receipt_originals_dir) / receipt.stored_filename
+    if not original_file.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The original receipt file could not be found.",
+        )
+
+    return FileResponse(
+        original_file,
+        media_type=receipt.mime_type,
+        filename=receipt.original_filename,
+    )

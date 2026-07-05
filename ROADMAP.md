@@ -10,14 +10,24 @@ Foundation
 
 Receipt Upload
 
+### Release 0.3.1
+
+Receipt Processing Engine
+
+### Release 0.3.2
+
+Receipt Selection
+
+### Release 0.3.3
+
+OCR Integration
+
 ## Planned
 
 ### Release 0.3
 
 Receipt Recognition
 
-- Receipt processing
-- OCR
 - AI extraction
 - Store extracted information
 
@@ -49,4 +59,3 @@ Household Intelligence
 - Receipt re-analysis
 - Multiple households
 - Multiple users
-

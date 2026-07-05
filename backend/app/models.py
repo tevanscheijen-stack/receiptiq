@@ -1,7 +1,7 @@
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -26,3 +26,24 @@ class Receipt(Base):
         default=lambda: datetime.now(UTC),
     )
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="UPLOADED")
+    processing_status: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="uploaded"
+    )
+    processing_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    processing_finished_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    processing_error: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    ocr_status: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="pending"
+    )
+    ocr_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    ocr_finished_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    ocr_error: Mapped[str | None] = mapped_column(String(1024), nullable=True)
+    ocr_text: Mapped[str | None] = mapped_column(Text, nullable=True)

@@ -41,7 +41,8 @@ ReceiptIQ is built around a few major functional areas:
 - Receipt intake: users add receipts from supported file types.
 - Original storage: uploaded receipt files are preserved unchanged.
 - Receipt registration: every receipt is recorded in SQLite with stable metadata.
-- Recognition and extraction: future releases will process receipts with OCR and AI.
+- OCR recognition: ReceiptIQ converts supported receipt files into plain text.
+- AI extraction: future releases will interpret OCR text into structured purchase information.
 - Product intelligence: future releases will understand products, quantities, prices, and categories.
 - Dashboard: future releases will visualise stored data without becoming the source of truth.
 - Insights: future releases will help households understand trends, habits, and opportunities.
@@ -63,4 +64,3 @@ Future possibilities:
 - EML
 - MSG
 - CSV
-

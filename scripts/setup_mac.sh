@@ -109,7 +109,8 @@ run_logged "Creating the private ReceiptIQ Python environment..." "$PYTHON_BIN" 
 source "$BACKEND_DIR/.venv/bin/activate"
 
 run_logged "Updating Python packaging tools..." python -m pip install --upgrade pip
-run_logged "Installing ReceiptIQ backend..." python -m pip install -e "$BACKEND_DIR"
+run_logged "Installing ReceiptIQ backend and local OCR support..." python -m pip install -e "$BACKEND_DIR"
+run_logged "Preparing local OCR models..." bash -c "cd '$BACKEND_DIR' && '$BACKEND_DIR/.venv/bin/python' -m app.ocr.prepare"
 run_logged "Installing ReceiptIQ frontend..." pnpm --dir "$FRONTEND_DIR" install --frozen-lockfile
 run_logged "Preparing the local database..." bash -c "cd '$BACKEND_DIR' && '$BACKEND_DIR/.venv/bin/alembic' upgrade head"
 

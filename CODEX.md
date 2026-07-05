@@ -34,9 +34,19 @@ Dashboard visualises data only.
 
 Receipt processing should be modular.
 
+The Processing Engine owns the complete user-facing lifecycle.
+
+Individual processors (OCR, AI extraction, product recognition and future processors) must never expose independent user-facing lifecycle states.
+
+The UI always reflects the overall processing pipeline.
+
 Importers should remain isolated.
 
 Future AI models must be able to reprocess old receipts.
+
+OCR must only recognize text.
+
+Receipt interpretation belongs exclusively to the AI extraction layer.
 
 ## AI Principles
 
@@ -75,4 +85,3 @@ PROJECT explains the product.
 CODEX explains how the project must be built.
 
 GitHub is the single source of truth.
-

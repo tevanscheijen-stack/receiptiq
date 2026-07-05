@@ -82,7 +82,32 @@ Supported file types:
 
 Maximum file size: 25 MB.
 
-ReceiptIQ does not read, parse, or analyse the receipt yet. This release only stores the original uploaded file.
+## Processing Receipts
+
+Uploaded receipts can be selected from the receipt list.
+
+Use the checkboxes to choose one or more receipts, then click:
+
+```text
+Process selected
+```
+
+Processing recognises the text on selected receipts and stores the plain OCR text locally.
+
+While ReceiptIQ is working, the receipt shows:
+
+```text
+Reading receipt...
+```
+
+ReceiptIQ does not interpret receipts yet. It does not detect shops, dates, products, prices, or categories.
+
+Open a receipt from the uploaded receipts list to inspect:
+
+- the original receipt
+- the recognised OCR text
+
+You can also copy the OCR text.
 
 ## If Setup Says Something Is Missing
 
